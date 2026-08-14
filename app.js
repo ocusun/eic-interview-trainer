@@ -20,8 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
 function setupEventListeners() {
   document.querySelectorAll('.nav-item').forEach(btn => {
     btn.addEventListener('click', () => {
-      const screen = btn.dataset.screen;
-      showScreen(screen);
+      showScreen(btn.dataset.screen);
       document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
     });
@@ -76,7 +75,7 @@ function renderExamList(yearFilter) {
   let exams = EXAMS.filter(e => e.type === 'OFFICIAL');
   if (yearFilter !== 'all') exams = exams.filter(e => String(e.year) === yearFilter);
   if (exams.length === 0) {
-    list.innerHTML = '<p style="color:var(--text-muted-dark);text-align:center;padding:20px;">해당 연도 기출이 아직 없습니다.</p>';
+    list.innerHTML = '<p style="color:var(--text-muted-dark);text-align:center;padding:20px;">해당 연도 기출은 곧 추가됩니다.<br>2025·2026은 영문 전문이 있습니다.</p>';
     return;
   }
   list.innerHTML = exams.map(e =>
@@ -98,13 +97,24 @@ function openExam(id) {
   document.getElementById('q-passage').textContent = currentExam.passage;
   document.getElementById('q-questions').innerHTML = currentExam.questions.map(q => '<p>' + q + '</p>').join('');
   document.getElementById('q-coach-tip').textContent = currentExam.coachTip || '';
-  const r = currentExam.rubric;
+  const r = currentExam.rubric || { high: '', mid: '', low: '' };
   document.getElementById('q-rubric').innerHTML =
     '<h4>상</h4><p>' + r.high + '</p><h4>중</h4><p>' + r.mid + '</p><h4>하</h4><p>' + r.low + '</p>' +
     (currentExam.exampleCore ? '<h4 style="margin-top:12px;">상위권 특징</h4><p>' + currentExam.exampleCore + '</p>' : '');
   document.getElementById('self-check').innerHTML = (currentExam.selfCheck || []).map(function(item, i) {
     return '<label><input type="checkbox" id="check-' + i + '"> ' + item + '</label>';
   }).join('');
+  // 해설보기
+  var intEl = document.getElementById('q-intention');
+  if (intEl) intEl.textContent = currentExam.intention || '';
+  var conEl = document.getElementById('q-concepts');
+  if (conEl) conEl.textContent = (currentExam.keyConcepts || []).join(' · ') || '-';
+  var exEl = document.getElementById('q-example-core');
+  if (exEl) exEl.textContent = currentExam.exampleCore || '';
+  var tipEl = document.getElementById('q-explain-tip');
+  if (tipEl) tipEl.textContent = currentExam.coachTip || '';
+  var rubEl = document.getElementById('q-explain-rubric');
+  if (rubEl) rubEl.innerHTML = '<p><strong>상</strong> ' + r.high + '</p><p><strong>중</strong> ' + r.mid + '</p><p><strong>하</strong> ' + r.low + '</p>';
   prepSeconds = (currentExam.prepMinutes || 1) * 60;
   answerSeconds = (currentExam.answerMinutes || 2) * 60;
   updateTimerDisplay();
@@ -118,7 +128,7 @@ function openExam(id) {
 }
 
 function startToday15() {
-  const official = EXAMS.filter(e => e.type === 'OFFICIAL' && e.passage && e.passage.indexOf('업데이트') === -1);
+  const official = EXAMS.filter(e => e.type === 'OFFICIAL' && e.passage && e.passage.indexOf('업데이트') === -1 && e.passage.indexOf('추가됩니다') === -1);
   if (official.length === 0) { openExam(EXAMS[0].id); return; }
   const progress = getProgress();
   const unmastered = official.filter(e => progress.mastered.indexOf(e.id) === -1);
@@ -134,13 +144,11 @@ function updateTimerDisplay() {
   document.getElementById('prep-timer').textContent = formatTime(prepSeconds);
   document.getElementById('answer-timer').textContent = formatTime(answerSeconds);
 }
-
 function formatTime(sec) {
   const m = Math.floor(sec / 60).toString().padStart(2, '0');
   const s = (sec % 60).toString().padStart(2, '0');
   return m + ':' + s;
 }
-
 function startPrepTimer() {
   stopTimers();
   prepSeconds = (currentExam && currentExam.prepMinutes ? currentExam.prepMinutes : 1) * 60;
@@ -151,7 +159,6 @@ function startPrepTimer() {
     if (prepSeconds <= 0) { clearInterval(prepInterval); prepInterval = null; }
   }, 1000);
 }
-
 function startAnswerTimer() {
   if (prepInterval) { clearInterval(prepInterval); prepInterval = null; }
   answerSeconds = (currentExam && currentExam.answerMinutes ? currentExam.answerMinutes : 2) * 60;
@@ -166,7 +173,6 @@ function startAnswerTimer() {
     }
   }, 1000);
 }
-
 function stopTimers() {
   if (prepInterval) clearInterval(prepInterval);
   if (answerInterval) clearInterval(answerInterval);
@@ -197,7 +203,6 @@ async function toggleRecord() {
       status.textContent = '녹음 중 · 다시 누르면 멈춰요';
     } catch (err) {
       status.textContent = '마이크를 허용해 주세요';
-      console.error(err);
     }
   } else {
     if (mediaRecorder && mediaRecorder.state !== 'inactive') mediaRecorder.stop();
@@ -216,7 +221,6 @@ function renderVocab() {
       '<div class="back"><strong>' + v.meaning + '</strong><br><em style="font-size:12px;color:var(--text-muted-dark)">' + v.example + '</em></div></div>';
   }).join('');
 }
-
 function shuffleVocab() {
   for (let i = VOCAB.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -224,23 +228,20 @@ function shuffleVocab() {
   }
   renderVocab();
 }
-
 function toggleVocabMode() {
   document.querySelectorAll('.vocab-card').forEach(function(c) { c.classList.toggle('flipped'); });
 }
 
 function getProgress() {
   try {
-    return JSON.parse(localStorage.getItem('eic_progress') || '{"mastered":[],"practiced":[],"streak":0,"lastDate":"","notes":{}}');
+    return JSON.parse(localStorage.getItem('eic_progress') || '{\"mastered\":[],\"practiced\":[],\"streak\":0,\"lastDate\":\"\",\"notes\":{}}');
   } catch (e) {
     return { mastered: [], practiced: [], streak: 0, lastDate: '', notes: {} };
   }
 }
-
 function saveProgressData(data) {
   localStorage.setItem('eic_progress', JSON.stringify(data));
 }
-
 function loadProgress() {
   const p = getProgress();
   const today = new Date().toISOString().slice(0, 10);
@@ -253,7 +254,6 @@ function loadProgress() {
     }
   }
 }
-
 function updateStats() {
   const p = getProgress();
   document.getElementById('stat-mastered').textContent = p.mastered.length;
@@ -261,7 +261,6 @@ function updateStats() {
   document.getElementById('stat-streak').textContent = p.streak;
   document.getElementById('streak-display').textContent = '🔥 ' + p.streak;
 }
-
 function saveProgress() {
   if (!currentExam) return;
   const p = getProgress();
@@ -293,9 +292,8 @@ function saveProgress() {
   }
   saveProgressData(p);
   updateStats();
-  alert('저장했어요! 잘하고 있어요 👍');
+  alert('저장했어요! 잘하고 있어요');
 }
-
 function renderProgress() {
   const p = getProgress();
   document.getElementById('progress-summary').innerHTML =
@@ -314,7 +312,6 @@ function renderProgress() {
     }).join('');
   }
 }
-
 function resetProgress() {
   if (confirm('모든 진행 기록을 삭제할까요?')) {
     localStorage.removeItem('eic_progress');
@@ -322,13 +319,11 @@ function resetProgress() {
     renderProgress();
   }
 }
-
 function applyTheme() {
   const theme = localStorage.getItem('eic_theme') || 'light';
   document.documentElement.setAttribute('data-theme', theme);
   document.getElementById('btn-theme').textContent = theme === 'dark' ? '☀️' : '🌙';
 }
-
 function toggleTheme() {
   const current = document.documentElement.getAttribute('data-theme') || 'light';
   const next = current === 'dark' ? 'light' : 'dark';
