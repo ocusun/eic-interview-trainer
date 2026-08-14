@@ -3,24 +3,23 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <meta name="theme-color" content="#0f172a" />
+  <meta name="theme-color" content="#0d9488" />
   <meta name="description" content="연세대 미래캠퍼스 동아시아국제학부(EIC) 글로벌인재 전형 면접 훈련 웹앱" />
-  <title>EIC Interview Trainer | Yonsei Mirae</title>
+  <title>EIC 면접 트레이너 | 연세대 미래</title>
   <link rel="manifest" href="manifest.json" />
   <link rel="stylesheet" href="styles.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
   <div id="app">
-    <!-- Top Bar -->
     <header class="topbar">
       <div class="topbar-left">
         <button id="btn-menu" class="icon-btn" aria-label="메뉴">☰</button>
         <div class="logo" onclick="showScreen('home')">
-          <span class="logo-main">EIC</span>
-          <span class="logo-sub">INTERVIEW TRAINER</span>
+          <span class="logo-main">EIC 면접</span>
+          <span class="logo-sub">연세대 미래 · 연습장</span>
         </div>
       </div>
       <div class="topbar-right">
@@ -29,54 +28,40 @@
       </div>
     </header>
 
-    <!-- Main Content -->
     <main id="main">
-      <!-- HOME -->
       <section id="screen-home" class="screen active">
         <div class="hero">
-          <h1>Yonsei Mirae EIC<br>Interview Practice</h1>
-          <p class="hero-desc">동아시아국제학부 · 글로벌인재 전형<br>영문 제시문 면접 훈련</p>
+          <h1>EIC 면접<br>매일 연습장</h1>
+          <p class="hero-desc">동아시아국제학부 · 글로벌인재 전형<br>영문 제시문으로 실전처럼 연습해요</p>
           <div class="hero-badge">비공식 학습도구 · 공식자료 기반</div>
         </div>
-
         <div class="quick-stats">
-          <div class="stat-card">
-            <div class="stat-num" id="stat-mastered">0</div>
-            <div class="stat-label">숙달</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-num" id="stat-practiced">0</div>
-            <div class="stat-label">연습</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-num" id="stat-streak">0</div>
-            <div class="stat-label">연속일</div>
-          </div>
+          <div class="stat-card"><div class="stat-num" id="stat-mastered">0</div><div class="stat-label">잘하게 된 문제</div></div>
+          <div class="stat-card"><div class="stat-num" id="stat-practiced">0</div><div class="stat-label">연습한 문제</div></div>
+          <div class="stat-card"><div class="stat-num" id="stat-streak">0</div><div class="stat-label">연속 연습일</div></div>
         </div>
-
         <div class="action-grid">
           <button class="action-card primary" onclick="startToday15()">
             <div class="action-icon">⚡</div>
             <div class="action-title">오늘의 15분</div>
-            <div class="action-desc">짧은 집중 훈련</div>
+            <div class="action-desc">짧게 집중해서 연습</div>
           </button>
           <button class="action-card" onclick="showScreen('exams')">
             <div class="action-icon">📋</div>
             <div class="action-title">공식 기출</div>
-            <div class="action-desc">2024~2026</div>
+            <div class="action-desc">2024~2026 문제</div>
           </button>
           <button class="action-card" onclick="showScreen('vocab')">
             <div class="action-icon">📚</div>
-            <div class="action-title">Vocabulary</div>
-            <div class="action-desc">면접 필수 어휘</div>
+            <div class="action-title">면접 어휘</div>
+            <div class="action-desc">꼭 외울 단어</div>
           </button>
           <button class="action-card" onclick="showScreen('progress')">
             <div class="action-icon">📊</div>
-            <div class="action-title">진행 상황</div>
-            <div class="action-desc">기록 & 오답</div>
+            <div class="action-title">내 기록</div>
+            <div class="action-desc">연습 현황 · 메모</div>
           </button>
         </div>
-
         <div class="notice">
           <strong>주의</strong><br>
           본 사이트는 연세대학교 공식 서비스가 아닙니다.<br>
@@ -84,7 +69,6 @@
         </div>
       </section>
 
-      <!-- EXAMS LIST -->
       <section id="screen-exams" class="screen">
         <div class="screen-header">
           <button class="back-btn" onclick="showScreen('home')">←</button>
@@ -99,34 +83,26 @@
         <div id="exam-list" class="exam-list"></div>
       </section>
 
-      <!-- EXAM DETAIL / PRACTICE FLOW -->
       <section id="screen-practice" class="screen">
         <div class="screen-header">
           <button class="back-btn" onclick="showScreen('exams')">←</button>
           <h2 id="practice-title">연습</h2>
-          <span class="badge official" id="practice-badge">OFFICIAL</span>
+          <span class="badge official" id="practice-badge">공식</span>
         </div>
-
-        <!-- Step Tabs -->
         <div class="step-tabs">
-          <button class="step-tab active" data-step="input">INPUT</button>
-          <button class="step-tab" data-step="think">THINK</button>
-          <button class="step-tab" data-step="speak">SPEAK</button>
-          <button class="step-tab" data-step="review">REVIEW</button>
+          <button class="step-tab active" data-step="input">읽기</button>
+          <button class="step-tab" data-step="think">생각하기</button>
+          <button class="step-tab" data-step="speak">말하기</button>
+          <button class="step-tab" data-step="review">점검하기</button>
         </div>
-
-        <!-- INPUT -->
         <div id="step-input" class="step-content active">
           <div class="card">
             <div class="card-label">제시문 주제</div>
             <h3 id="q-topic"></h3>
-            <div class="meta-row">
-              <span id="q-year"></span>
-              <span id="q-time"></span>
-            </div>
+            <div class="meta-row"><span id="q-year"></span><span id="q-time"></span></div>
           </div>
-          <div class="card passage-card">
-            <div class="card-label">영문 제시문 <span class="official-tag">OFFICIAL</span></div>
+          <div class="card">
+            <div class="card-label">영문 제시문 <span class="official-tag">공식</span></div>
             <div id="q-passage" class="passage"></div>
           </div>
           <div class="card">
@@ -134,37 +110,33 @@
             <div id="q-questions" class="questions"></div>
           </div>
           <div class="card coach-card">
-            <div class="card-label">Coach Tip</div>
+            <div class="card-label">연습 팁</div>
             <div id="q-coach-tip"></div>
           </div>
-          <button class="btn primary full" onclick="goStep('think')">THINK로 이동 →</button>
+          <button class="btn primary full" onclick="goStep('think')">다음: 생각하기 →</button>
         </div>
-
-        <!-- THINK -->
         <div id="step-think" class="step-content">
           <div class="card">
-            <div class="card-label">EIC 6-STEP 사고 프레임</div>
+            <div class="card-label">EIC 6단계 생각 순서</div>
             <ol class="think-steps">
               <li><strong>핵심 내용</strong> 찾기</li>
               <li><strong>대립 관점</strong> 찾기</li>
               <li><strong>근거</strong> 뽑기</li>
               <li><strong>내 입장</strong> 정하기</li>
               <li><strong>이유 2개 + 사례</strong></li>
-              <li><strong>반대 입장</strong> 인정 후 재주장</li>
+              <li><strong>반대 입장</strong> 인정 후 다시 주장</li>
             </ol>
           </div>
           <div class="card">
-            <label>한국어로 논리 정리 (메모)</label>
+            <label>한국어로 먼저 정리해 보세요</label>
             <textarea id="think-memo" rows="8" placeholder="1. 핵심:\n2. 대립관점:\n3. 근거:\n4. 내 입장:\n5. 이유1 / 이유2 + 사례:\n6. 반대인정 + 재주장:"></textarea>
           </div>
           <div class="card">
-            <label>영어 키워드 / 문장 초안</label>
-            <textarea id="think-en" rows="5" placeholder="Key words / sentence skeletons..."></textarea>
+            <label>영어 키워드 · 문장 초안</label>
+            <textarea id="think-en" rows="5" placeholder="쓸 단어나 문장 구조를 미리 적어보세요"></textarea>
           </div>
-          <button class="btn primary full" onclick="goStep('speak')">SPEAK로 이동 →</button>
+          <button class="btn primary full" onclick="goStep('speak')">다음: 말하기 →</button>
         </div>
-
-        <!-- SPEAK -->
         <div id="step-speak" class="step-content">
           <div class="timer-box">
             <div class="timer-label">준비 시간</div>
@@ -174,110 +146,76 @@
             <div class="timer-controls">
               <button class="btn" id="btn-start-prep">준비 시작</button>
               <button class="btn primary" id="btn-start-answer">답변 시작</button>
-              <button class="btn danger" id="btn-stop-timer">정지</button>
+              <button class="btn danger" id="btn-stop-timer">멈춤</button>
             </div>
           </div>
-
           <div class="record-box">
-            <div class="record-status" id="record-status">녹음 대기</div>
+            <div class="record-status" id="record-status">녹음 준비</div>
             <button class="record-btn" id="btn-record">
               <span class="rec-icon">⏺</span>
-              <span class="rec-text">녹음 시작</span>
+              <span class="rec-text">녹음하기</span>
             </button>
-            <audio id="audio-playback" controls style="display:none; width:100%; margin-top:12px;"></audio>
+            <audio id="audio-playback" controls style="display:none;width:100%;margin-top:12px;"></audio>
           </div>
-
           <div class="card">
-            <label>영어 답변 메모 (선택)</label>
-            <textarea id="speak-memo" rows="4" placeholder="말한 내용을 간단히 기록..."></textarea>
+            <label>말한 내용 메모 (선택)</label>
+            <textarea id="speak-memo" rows="4" placeholder="방금 말한 내용을 짧게 적어보세요"></textarea>
           </div>
-          <button class="btn primary full" onclick="goStep('review')">REVIEW로 이동 →</button>
+          <button class="btn primary full" onclick="goStep('review')">다음: 점검하기 →</button>
         </div>
-
-        <!-- REVIEW -->
         <div id="step-review" class="step-content">
           <div class="card">
-            <div class="card-label">공식 채점 기준 <span class="official-tag">OFFICIAL</span></div>
+            <div class="card-label">공식 채점 기준 <span class="official-tag">공식</span></div>
             <div id="q-rubric" class="rubric"></div>
           </div>
           <div class="card">
-            <div class="card-label">자기 평가 체크리스트</div>
+            <div class="card-label">스스로 체크해 보세요</div>
             <div id="self-check" class="checklist"></div>
           </div>
           <div class="card coach-card">
-            <div class="card-label">Coach 점수 (비공식)</div>
-            <div class="score-row">
-              <label>논리력</label>
-              <input type="range" min="1" max="5" value="3" id="score-logic">
-              <span id="score-logic-val">3</span>
-            </div>
-            <div class="score-row">
-              <label>영어 표현</label>
-              <input type="range" min="1" max="5" value="3" id="score-eng">
-              <span id="score-eng-val">3</span>
-            </div>
-            <div class="score-row">
-              <label>구체성</label>
-              <input type="range" min="1" max="5" value="3" id="score-detail">
-              <span id="score-detail-val">3</span>
-            </div>
-            <textarea id="coach-note" rows="3" placeholder="스스로 느낀 점 / 다음에 보완할 점"></textarea>
+            <div class="card-label">연습 점수 (참고용)</div>
+            <div class="score-row"><label>논리</label><input type="range" min="1" max="5" value="3" id="score-logic"><span id="score-logic-val">3</span></div>
+            <div class="score-row"><label>영어</label><input type="range" min="1" max="5" value="3" id="score-eng"><span id="score-eng-val">3</span></div>
+            <div class="score-row"><label>구체성</label><input type="range" min="1" max="5" value="3" id="score-detail"><span id="score-detail-val">3</span></div>
+            <textarea id="coach-note" rows="3" placeholder="오늘 잘한 점 · 다음에 고칠 점"></textarea>
           </div>
           <div class="btn-row">
-            <button class="btn" onclick="saveProgress()">저장</button>
-            <button class="btn primary" onclick="retryQuestion()">다시 연습</button>
+            <button class="btn" onclick="saveProgress()">저장하기</button>
+            <button class="btn primary" onclick="retryQuestion()">다시 해보기</button>
           </div>
         </div>
       </section>
 
-      <!-- VOCAB -->
       <section id="screen-vocab" class="screen">
         <div class="screen-header">
           <button class="back-btn" onclick="showScreen('home')">←</button>
-          <h2>Vocabulary</h2>
+          <h2>면접 어휘</h2>
         </div>
         <div class="vocab-controls">
-          <button class="btn" onclick="shuffleVocab()">셔플</button>
-          <button class="btn" onclick="toggleVocabMode()">플립 모드</button>
+          <button class="btn" onclick="shuffleVocab()">섞기</button>
+          <button class="btn" onclick="toggleVocabMode()">뜻 보기</button>
         </div>
         <div id="vocab-list" class="vocab-list"></div>
       </section>
 
-      <!-- PROGRESS -->
       <section id="screen-progress" class="screen">
         <div class="screen-header">
           <button class="back-btn" onclick="showScreen('home')">←</button>
-          <h2>진행 상황</h2>
+          <h2>내 기록</h2>
         </div>
-        <div class="card">
-          <h3>학습 기록</h3>
-          <div id="progress-summary"></div>
-        </div>
-        <div class="card">
-          <h3>오답 / 재연습 노트</h3>
-          <div id="wrong-list"></div>
-        </div>
-        <button class="btn danger full" onclick="resetProgress()">전체 초기화</button>
+        <div class="card"><h3>연습 현황</h3><div id="progress-summary"></div></div>
+        <div class="card"><h3>메모 · 다시 볼 문제</h3><div id="wrong-list"></div></div>
+        <button class="btn danger full" onclick="resetProgress()">기록 모두 지우기</button>
       </section>
     </main>
 
-    <!-- Bottom Nav -->
     <nav class="bottom-nav">
-      <button class="nav-item active" data-screen="home">
-        <span>🏠</span><span>홈</span>
-      </button>
-      <button class="nav-item" data-screen="exams">
-        <span>📋</span><span>기출</span>
-      </button>
-      <button class="nav-item" data-screen="vocab">
-        <span>📚</span><span>어휘</span>
-      </button>
-      <button class="nav-item" data-screen="progress">
-        <span>📊</span><span>기록</span>
-      </button>
+      <button class="nav-item active" data-screen="home"><span>🏠</span><span>홈</span></button>
+      <button class="nav-item" data-screen="exams"><span>📋</span><span>기출문제</span></button>
+      <button class="nav-item" data-screen="vocab"><span>📚</span><span>어휘공부</span></button>
+      <button class="nav-item" data-screen="progress"><span>📊</span><span>내 기록</span></button>
     </nav>
   </div>
-
   <script src="data.js"></script>
   <script src="app.js"></script>
 </body>
