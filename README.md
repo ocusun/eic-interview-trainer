@@ -1,2 +1,20 @@
-# eic-interview-trainer
-Yonsei Mirae EIC Interview Practice - Mobile-first interview training web app for East Asian International Studies (비공식 학습도구)
+# EIC 면접 트레이너
+
+연세대학교 미래캠퍼스 동아시아국제학부(EIC) · 글로벌인재 전형
+영문 제시문 면접 훈련 웹앱 (모바일 우선)
+
+## 접속
+https://ocusun.github.io/eic-interview-trainer/
+
+## 안내
+- 연세대학교 공식 서비스가 아닙니다.
+- 선행학습 영향평가 결과보고서(2020~2026) 기반 비공식 학습 도구입니다.
+
+## V1 기능
+- 오늘의 15분
+- 공식 기출 (2026 상세 포함)
+- 읽기 → 생각하기 → 말하기 → 점검하기
+- 타이머 · 녹음 · 자기평가
+- 면접 어휘 카드
+- 진행률 저장
+- 다크/라이트 모드
